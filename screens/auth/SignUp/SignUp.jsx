@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, TextInput, Button } from 'react-native'
-import Input from '../../ui/Input'
+import Input from 'components/ui/Input'
 import theme from 'app/theme'
 import Screen from 'components/ui/Screen'
 import CustomButton from 'components/ui/CustomButton'

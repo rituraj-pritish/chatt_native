@@ -2,6 +2,8 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/storage';
 
+window.addEventListener = () => {}
+
 const config = {
   apiKey: 'AIzaSyDaynlhqbPi0HtenabQpGpw26omZ-hGS6c',
   authDomain: 'chat-c063c.firebaseapp.com',
