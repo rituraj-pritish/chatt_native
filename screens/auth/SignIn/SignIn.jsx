@@ -49,13 +49,13 @@ const SignIn = ({ navigation, signIn, loading, authStateChangeHandler, appLoadin
         loading={loading}
       />
 
-      <CustomText textAlign='center'>or</CustomText>
+      {/* <CustomText textAlign='center'>or</CustomText>
 
       <CustomButton
         title='Sign In with Google'
         color={theme.google}
         onPress={() => authWithGoogle()}
-      />
+      /> */}
       <CustomText>
         <CustomText color='blue' onPress={() => navigation.navigate('signup')}>
           Sign Up

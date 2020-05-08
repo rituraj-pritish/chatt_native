@@ -1,13 +1,14 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import CustomText from 'components/ui/CustomText'
+import { Message } from './MessageItem.styled'
 
 const MessageItem = ({ message, author, date, currentUser, sendMessage }) => {
   return (
     <View>
-      <CustomText textAlign={author === currentUser ? 'right' : 'left'}>
-        {message}
-      </CustomText>
+      <Message alignRight={author === currentUser}>
+        <CustomText>{message}</CustomText>
+      </Message>
     </View>
   )
 }

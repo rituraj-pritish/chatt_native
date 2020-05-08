@@ -1,24 +1,47 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useLayoutEffect } from 'react'
 import {
   View,
   Text,
   StyleSheet,
   FlatList,
   Button,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  ActivityIndicator,
+  TouchableOpacity
 } from 'react-native'
-import Screen from 'components/ui/Screen'
 import MessageItem from 'components/MessageItem'
 import Input from 'components/ui/Input'
-import { InputBtn } from './Chat.styled'
+import { InputBtn, ChatWrapper, SendBtn } from './Chat.styled'
+import ChatHeader from '../../components/ChatHeader/ChatHeader'
+import theme from 'app/theme'
+import Screen from 'components/ui/Screen'
+import Ionicons from '@expo/vector-icons/Ionicons'
 
-const Chat = ({ getChat, messages, loading, route, sendMessage }) => {
+const Chat = ({
+  navigation,
+  getChat,
+  messages,
+  loading,
+  route,
+  sendMessage,
+  clearChat
+}) => {
   const [text, setText] = useState('')
   const flatListRef = useRef()
-  const { receiverId } = route.params
+  const { receiverId, name, photoURL } = route.params
 
   useEffect(() => {
     getChat(receiverId)
+
+    return () => {
+      clearChat()
+    }
+  }, [])
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: props => <ChatHeader name={name} photoURL={photoURL} />
+    })
   }, [])
 
   const renderMessages = ({ item }) => (
@@ -30,8 +53,48 @@ const Chat = ({ getChat, messages, loading, route, sendMessage }) => {
     setText('')
   }
 
+  if (loading || !messages.length)
+    return (
+      <ChatWrapper
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        {loading ? (
+          <ActivityIndicator size={40} color={theme.primary} />
+        ) : (
+          <>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Text>Send message to start conversation</Text>
+            </View>
+            <InputBtn>
+              <Input
+                value={text}
+                onChangeText={newText => setText(newText)}
+                borderRadius={20}
+                onSubmitEditing={handleSend}
+                returnKeyType='send'
+                flex={1}
+              />
+              <SendBtn onPress={handleSend} disabled={!text}>
+                <Ionicons name='md-send' size={28} color='white' />
+              </SendBtn>
+            </InputBtn>
+          </>
+        )}
+      </ChatWrapper>
+    )
+
   return (
-    <Screen style={{ flex: 1 }}>
+    <ChatWrapper flex={1}>
       <KeyboardAvoidingView style={{ flex: 1 }}>
         <FlatList
           data={messages}
@@ -48,12 +111,14 @@ const Chat = ({ getChat, messages, loading, route, sendMessage }) => {
             value={text}
             onChangeText={newText => setText(newText)}
             borderRadius={20}
-            width='80%'
+            flex={1}
           />
-          <Button title='Send' onPress={handleSend} disabled={!text} />
+          <SendBtn onPress={handleSend} disabled={!text}>
+            <Ionicons name='md-send' size={28} color='white' />
+          </SendBtn>
         </InputBtn>
       </KeyboardAvoidingView>
-    </Screen>
+    </ChatWrapper>
   )
 }
 

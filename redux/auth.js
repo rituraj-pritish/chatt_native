@@ -3,6 +3,7 @@ import { firebase, db } from 'app/firebase'
 const AUTH_REQUEST = 'AUTH_REQUEST'
 const AUTH_SUCCESS = 'AUTH_SUCCESS'
 const AUTH_FAILURE = 'AUTH_FAILURE'
+const SIGNOUT = 'SIGNOUT'
 
 export const signUp = ({ name, email, password }) => async dispatch => {
   const DEFAULT_IMAGE_URL =
@@ -75,9 +76,10 @@ export const authWithGoogle = () => async dispatch => {
   }
 }
 
-export const signOut = async () => {
+export const signOut = () => async (dispatch, getState) => {
+  const auth = getState().auth
   try {
-    await db.collection('users').doc(state.user.uid).update({
+    await db.collection('users').doc(auth.user.uid).update({
       online: false
     })
     firebase.auth().signOut()
@@ -144,6 +146,14 @@ export const authReducer = (state = initialState, { type, payload }) => {
         loading: false,
         isAuth: false,
         error: payload,
+        user: null
+      }
+    case SIGNOUT:
+      return {
+        ...state,
+        loading: false,
+        isAuth: false,
+        error: null,
         user: null
       }
     default:

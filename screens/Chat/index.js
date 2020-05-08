@@ -1,6 +1,6 @@
 import Chat from './Chat'
 import { connect } from 'react-redux'
-import { sendMessage, getChat } from 'app/redux/user'
+import { sendMessage, getChat, clearChat } from 'app/redux/user'
 
 const mapStateToProps = ({ user }) => ({
   messages: user.chatMessages,
@@ -9,4 +9,4 @@ const mapStateToProps = ({ user }) => ({
 
 const mapDispatchToProps = {}
 
-export default connect(mapStateToProps, { getChat, sendMessage })(Chat)
+export default connect(mapStateToProps, { getChat, sendMessage, clearChat })(Chat)

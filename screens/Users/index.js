@@ -5,10 +5,11 @@ import { getUsers } from 'app/redux/user'
 
 const mapStateToProps = ({ user, auth }) => {
   const usersExceptCurrentUser = user.users.filter(
-    item => item.uid !== auth.user.uid
+    item => item.uid !== auth.user?.uid
   )
   return {
-    users: usersExceptCurrentUser
+    users: usersExceptCurrentUser,
+    loading: user.loading
   }
 }
 

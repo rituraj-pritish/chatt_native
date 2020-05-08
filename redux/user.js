@@ -41,7 +41,7 @@ export const getChat = reciever => async (dispatch, getState) => {
   }
 }
 
-export const clearChat = () => dispatch({ type: CLEAR_CHAT_MESSAGES })
+export const clearChat = () => ({ type: CLEAR_CHAT_MESSAGES })
 
 export const sendMessage = (reciever, message) => async (
   dispatch,

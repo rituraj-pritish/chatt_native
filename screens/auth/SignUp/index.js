@@ -1,3 +1,5 @@
-import SignUp from "./SignUp";
+import SignUp from './SignUp'
+import { connect } from 'react-redux'
+import { signUp } from 'app/redux/auth'
 
-export default SignUp
+export default connect(null, { signUp })(SignUp)
