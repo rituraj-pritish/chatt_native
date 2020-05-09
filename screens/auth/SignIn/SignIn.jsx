@@ -14,7 +14,13 @@ import CustomButton from 'components/ui/CustomButton'
 import CustomText from 'components/ui/CustomText'
 import { authWithGoogle, authStateChangeHandler } from '../../../redux/auth'
 
-const SignIn = ({ navigation, signIn, loading, authStateChangeHandler, appLoading }) => {
+const SignIn = ({
+  navigation,
+  signIn,
+  loading,
+  authStateChangeHandler,
+  appLoading
+}) => {
   const [email, setEmail] = useState('jd@gmail.com')
   const [password, setPassword] = useState('123123')
 
@@ -27,7 +33,11 @@ const SignIn = ({ navigation, signIn, loading, authStateChangeHandler, appLoadin
   }, [])
 
   if (appLoading) {
-    return <ActivityIndicator />
+    return (
+      <Screen flex={1} justifyContent='center' alignItems='center'>
+        <ActivityIndicator size={50} color={theme.primary} />
+      </Screen>
+    )
   }
 
   return (

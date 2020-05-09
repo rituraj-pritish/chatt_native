@@ -3,6 +3,11 @@ import { firebase, db } from 'app/firebase'
 const AUTH_REQUEST = 'AUTH_REQUEST'
 const AUTH_SUCCESS = 'AUTH_SUCCESS'
 const AUTH_FAILURE = 'AUTH_FAILURE'
+
+const AUTH_STATE_REQUEST = 'AUTH_STATE_REQUEST'
+const AUTH_STATE_SUCCESS = 'AUTH_STATE_SUCCESS'
+const AUTH_STATE_FAILURE = 'AUTH_STATE_FAILURE'
+
 const SIGNOUT = 'SIGNOUT'
 
 export const signUp = ({ name, email, password }) => async dispatch => {
@@ -90,6 +95,7 @@ export const signOut = () => async (dispatch, getState) => {
 }
 
 export const authStateChangeHandler = () => async dispatch => {
+  dispatch({ type: AUTH_STATE_REQUEST })
   firebase.auth().onAuthStateChanged(async user => {
     if (user) {
       await db.collection('users').doc(user.uid).update({
@@ -101,7 +107,7 @@ export const authStateChangeHandler = () => async dispatch => {
       const { displayName, email, photoURL, uid } = res.data()
 
       dispatch({
-        type: AUTH_SUCCESS,
+        type: AUTH_STATE_SUCCESS,
         payload: {
           displayName,
           email,
@@ -110,7 +116,7 @@ export const authStateChangeHandler = () => async dispatch => {
         }
       })
     } else {
-      dispatch({ type: AUTH_FAILURE })
+      dispatch({ type: AUTH_STATE_FAILURE })
     }
   })
 }
@@ -119,7 +125,8 @@ const initialState = {
   loading: false,
   isAuth: false,
   error: null,
-  user: null
+  user: null,
+  stateLoading: false
 }
 
 export const authReducer = (state = initialState, { type, payload }) => {
@@ -148,6 +155,32 @@ export const authReducer = (state = initialState, { type, payload }) => {
         error: payload,
         user: null
       }
+    case AUTH_STATE_REQUEST: {
+      return {
+        ...state,
+        stateLoading: true
+      }
+    }
+    case AUTH_STATE_SUCCESS: {
+      return {
+        ...state,
+        stateLoading: false,
+        isAuth: true,
+        user: payload,
+        error: null,
+        loading: false
+      }
+    }
+    case AUTH_STATE_FAILURE: {
+      return {
+        ...state,
+        isAuth: false,
+        stateLoading: false,
+        loading: false,
+        user: null,
+        error: payload
+      }
+    }
     case SIGNOUT:
       return {
         ...state,

@@ -1,5 +1,5 @@
 import { db, firebase } from 'app/firebase'
-import { v4 as uuid } from 'uuid'
+import newUid from 'app/helpers/newUid'
 
 const SET_LOADING = 'SET_LOADING'
 const SET_CHAT_MESSAGES = 'SET_CHAT_MESSAGES'
@@ -56,7 +56,7 @@ export const sendMessage = (reciever, message) => async (
       message,
       author: currentUser,
       date: Date.now(),
-      uid: uuid()
+      uid: newUid()
     })
 
     if (res.id) await messagesRef.doc(res.id).update({ uid: res.id })
